@@ -4,4 +4,6 @@
 	let { children } = $props();
 </script>
 
-{@render children()}
+<main class="grid min-h-dvh content-center justify-items-center gap-8 p-4">
+	{@render children()}
+</main>
