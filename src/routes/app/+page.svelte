@@ -1,57 +1,111 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
+	import Red from '$lib/images/red.webp?enhanced&w=600';
+	import Orange from '$lib/images/orange.webp?enhanced&w=600';
+	import Yellow from '$lib/images/yellow.webp?enhanced&w=600';
+	import Green from '$lib/images/green.webp?enhanced&w=600';
 
 	let { data } = $props();
 
 	let status = $state(data.towelDirty ? data.towelDirty : -1);
 
-	$inspect(status);
+	let color = $derived.by(() => {
+		let color;
+		color = getColor(getValue(status));
+		return color;
+	});
+
+	type description = 'good' | 'hmmm' | 'uhhh' | 'yikes' | '';
+
+	function getValue(val: number): description {
+		const day = 24;
+
+		if (val > 0 && val <= 2 * day) return 'good';
+
+		if (val > 2 * day && val <= 4 * day) return 'hmmm';
+
+		if (val > 4 * day && val <= 6 * day) return 'uhhh';
+
+		if (val > 6 * day && val <= 999 * day) return 'yikes';
+
+		return '';
+	}
+
+	function getColor(strDes: string): string {
+		if (strDes === 'good') return 'text-lime-400';
+
+		if (strDes === 'hmmm') return 'text-yellow-500';
+
+		if (strDes === 'uhhh') return 'text-orange-400';
+
+		if (strDes === 'yikes') return 'text-red-700';
+
+		return 'base-content';
+	}
+
+	$inspect(color);
 </script>
 
-<div class="font-logo text-9xl"><a href="/">Towelie</a></div>
-
-<div
-	class={status < 2
-		? 'text-lime-500'
-		: status < 5
-			? 'text-orange-400'
-			: status < 8
-				? 'text-orange-700'
-				: status < 365
-					? 'text-red-700'
-					: 'text-base-content'}
->
-	<svg
-		xmlns="http://www.w3.org/2000/svg"
-		width="32"
-		height="32"
-		class="hugeicons:towels h-96 w-96"
-		viewBox="0 0 24 24"
-		><path
-			fill="none"
-			stroke="currentColor"
-			stroke-linecap="round"
-			stroke-linejoin="round"
-			stroke-width="1.5"
-			d="M6.5 5H15c1.886 0 2.828 0 3.414.586S19 7.114 19 9v3c0 1.886 0 2.828-.586 3.414S16.886 16 15 16h-3c-1.886 0-2.828 0-3.414-.586S8 13.886 8 12V8M6.5 5A1.5 1.5 0 0 0 5 6.5V8h3M6.5 5A1.5 1.5 0 0 1 8 6.5V8m9 8c0 1.886 0 2.828-.586 3.414S14.886 20 13 20H9c-1.886 0-2.828 0-3.414-.586S5 17.886 5 16v-5m17-7v1c0 .932 0 1.398-.152 1.765a2 2 0 0 1-1.083 1.083C20.398 8 19.932 8 19 8M2 4v1c0 .932 0 1.398.152 1.765a2 2 0 0 0 1.083 1.083C3.602 8 4.068 8 5 8"
-			color="currentColor"
-		/></svg
-	>
-</div>
-
-<form method="POST" action="?/refresh" use:enhance>
-	<button class="btn btn-xl btn-primary">I just washed!</button>
-</form>
-
-<div class="card bg-base-100 card-sm mt-16 w-96 shadow-sm">
-	<div class="card-body">
-		<h2 class="card-title">Last 5 Washes</h2>
-		{#if data.towels.length > 0}
-			{#each data.towels as towel}
-				<li>{towel.createdAtFormatted}</li>
-			{/each}
+<div class="grid grid-cols-2 content-center justify-items-center gap-8">
+	<div class="grid content-center justify-items-center">
+		{#if getValue(status) === 'good'}
+			<enhanced:img src={Green} alt="good" class="rounded-3xl" />
+		{:else if getValue(status) === 'hmmm'}
+			<enhanced:img src={Yellow} alt="hmmm" class="rounded-3xl" />
+		{:else if getValue(status) === 'uhhh'}
+			<enhanced:img src={Orange} alt="uhhh" class="rounded-3xl" />
 		{:else}
-			No washes!
+			<enhanced:img src={Red} alt="yikes" class="rounded-3xl" />
 		{/if}
+	</div>
+	<div class="grid content-center justify-items-center gap-8">
+		<div class="font-logo text-center text-9xl"><a href="/">Towelie</a></div>
+
+		<form method="POST" action="?/refresh" class="w-full" use:enhance>
+			<button class="btn btn-xl btn-primary h-24 w-full text-4xl">Washed!</button>
+		</form>
+		<div class="grid min-h-16 w-full max-w-96 grid-cols-4">
+			<div
+				class="flex items-center justify-center rounded-l-lg bg-lime-400 {getValue(status) ===
+				'good'
+					? 'border-base-content border-4 font-bold'
+					: undefined}"
+			>
+				Good
+			</div>
+			<div
+				class="flex items-center justify-center bg-yellow-500 {getValue(status) === 'hmmm'
+					? 'border-base-content border-4 font-bold'
+					: undefined}"
+			>
+				Hmmm
+			</div>
+			<div
+				class="flex items-center justify-center bg-orange-400 {getValue(status) === 'uhhh'
+					? 'border-base-content border-4 font-bold'
+					: undefined}"
+			>
+				Uhhh
+			</div>
+			<div
+				class="flex items-center justify-center rounded-r-lg bg-red-700 {getValue(status) ===
+				'yikes'
+					? 'border-base-content border-4 font-bold'
+					: undefined}"
+			>
+				Yikes
+			</div>
+		</div>
+
+		<div class="w-full text-sm">
+			<h2 class="card-title">Last 5 Washes</h2>
+			{#if data.towels.length > 0}
+				{#each data.towels as towel}
+					<li class="ms-1">{towel.createdAtFormatted}</li>
+				{/each}
+			{:else}
+				No washes!
+			{/if}
+		</div>
 	</div>
 </div>

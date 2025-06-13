@@ -5,6 +5,7 @@
 	let status = $state('');
 	let email = $state('');
 	let password = $state('');
+	let errorResponse = $state(false);
 
 	async function submitHandler() {
 		const { data, error } = await authClient.signIn.email({
@@ -12,6 +13,11 @@
 			password: password,
 			callbackURL: '/'
 		});
+
+		if (error) {
+			errorResponse = true;
+			status = 'error';
+		}
 	}
 </script>
 
@@ -80,6 +86,9 @@
 				letter
 			</p>
 		</div>
+		{#if errorResponse}
+			<div class="text-error font-semibold">Login error with the email or password entered.</div>
+		{/if}
 		<div class="grid">
 			<button class="btn {status === 'success' ? 'btn-success' : 'btn-primary'}">
 				{#if status === 'success'}

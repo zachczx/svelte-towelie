@@ -6,6 +6,7 @@
 	let form = $state();
 	let email = $state('');
 	let password = $state('');
+	let errorResponse = $state('');
 
 	async function registerHandler() {
 		const { data, error } = await authClient.signUp.email({
@@ -18,12 +19,12 @@
 					goto('/');
 				},
 				onError(context) {
-					alert(context.error.message);
+					// alert(context.error.message);
+					errorResponse = context.error?.message ? context.error?.message : 'Error registering';
+					status = 'error';
 				}
 			}
 		});
-		console.log(data);
-		console.log(error);
 	}
 </script>
 
@@ -93,6 +94,9 @@
 				letter
 			</p>
 		</div>
+		{#if errorResponse}
+			<div class="text-error font-semibold">{errorResponse}!</div>
+		{/if}
 		<div class="grid">
 			<button class="btn {status === 'success' ? 'btn-success' : 'btn-primary'}">
 				{#if status === 'success'}
