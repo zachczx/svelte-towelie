@@ -1,6 +1,6 @@
 import type { PageServerLoad } from './$types';
 import { db } from '$lib/drizzle/db';
-import { eq, lt, gte, ne, desc, asc, and } from 'drizzle-orm';
+import { eq, desc } from 'drizzle-orm';
 import { towel } from '$lib/drizzle/schema';
 import { fail, redirect, type Actions } from '@sveltejs/kit';
 import { calculateDateAgo } from '$lib/utils';
