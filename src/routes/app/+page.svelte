@@ -7,13 +7,13 @@
 
 	let { data } = $props();
 
-	let status = $state(data.towelDirty ? data.towelDirty : -1);
-	let modal = $state() as HTMLDialogElement;
-	let color = $derived.by(() => {
-		let color;
-		color = getColor(getValue(status));
-		return color;
+	let status = $derived.by(() => {
+		if (!data.towelDirty) {
+			return '';
+		}
+		return getValue(data.towelDirty);
 	});
+	let modal = $state() as HTMLDialogElement;
 
 	type description = 'good' | 'hmmm' | 'uhhh' | 'yikes' | '';
 
@@ -46,11 +46,11 @@
 
 <div class="grid content-center justify-items-center gap-8 lg:grid-cols-2">
 	<div class="grid content-center justify-items-center">
-		{#if getValue(status) === 'good'}
+		{#if status === 'good'}
 			<enhanced:img src={Green} alt="good" class="rounded-3xl" />
-		{:else if getValue(status) === 'hmmm'}
+		{:else if status === 'hmmm'}
 			<enhanced:img src={Yellow} alt="hmmm" class="rounded-3xl" />
-		{:else if getValue(status) === 'uhhh'}
+		{:else if status === 'uhhh'}
 			<enhanced:img src={Orange} alt="uhhh" class="rounded-3xl" />
 		{:else}
 			<enhanced:img src={Red} alt="yikes" class="rounded-3xl" />
@@ -67,11 +67,11 @@
 			Status:
 
 			<div class="flex items-center gap-2">
-				{#if getValue(status) === 'good'}
+				{#if status === 'good'}
 					<div class="h-4 w-4 rounded-full bg-lime-400"></div>
-				{:else if getValue(status) === 'hmmm'}
+				{:else if status === 'hmmm'}
 					<div class="h-4 w-4 rounded-full bg-yellow-500"></div>
-				{:else if getValue(status) === 'uhhh'}
+				{:else if status === 'uhhh'}
 					<div class="h-4 w-4 rounded-full bg-orange-400"></div>
 				{:else}
 					<div class="h-4 w-4 rounded-full bg-red-700"></div>
@@ -88,30 +88,28 @@
 		<h3 class="text-4xl font-bold">More Details</h3>
 		<div class="grid min-h-16 w-full grid-cols-4">
 			<div
-				class="flex items-center justify-center rounded-l-lg bg-lime-400 {getValue(status) ===
-				'good'
+				class="flex items-center justify-center rounded-l-lg bg-lime-400 {status === 'good'
 					? 'border-base-content border-4 font-bold'
 					: undefined}"
 			>
 				Good
 			</div>
 			<div
-				class="flex items-center justify-center bg-yellow-500 {getValue(status) === 'hmmm'
+				class="flex items-center justify-center bg-yellow-500 {status === 'hmmm'
 					? 'border-base-content border-4 font-bold'
 					: undefined}"
 			>
 				Hmmm
 			</div>
 			<div
-				class="flex items-center justify-center bg-orange-400 {getValue(status) === 'uhhh'
+				class="flex items-center justify-center bg-orange-400 {status === 'uhhh'
 					? 'border-base-content border-4 font-bold'
 					: undefined}"
 			>
 				Uhhh
 			</div>
 			<div
-				class="flex items-center justify-center rounded-r-lg bg-red-700 {getValue(status) ===
-				'yikes'
+				class="flex items-center justify-center rounded-r-lg bg-red-700 {status === 'yikes'
 					? 'border-base-content border-4 font-bold'
 					: undefined}"
 			>
