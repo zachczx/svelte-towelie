@@ -1,8 +1,12 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
+	//@ts-ignore
 	import Red from '$lib/images/red.webp?enhanced&w=600';
+	//@ts-ignore
 	import Orange from '$lib/images/orange.webp?enhanced&w=600';
+	//@ts-ignore
 	import Yellow from '$lib/images/yellow.webp?enhanced&w=600';
+	//@ts-ignore
 	import Green from '$lib/images/green.webp?enhanced&w=600';
 
 	let { data } = $props();
