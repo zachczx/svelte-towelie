@@ -46,8 +46,6 @@
 
 		return 'base-content';
 	}
-
-	$inspect(color);
 </script>
 
 <div class="grid content-center justify-items-center gap-8 lg:grid-cols-2">
