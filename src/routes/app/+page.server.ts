@@ -2,7 +2,7 @@ import type { PageServerLoad } from './$types';
 import { db } from '$lib/drizzle/db';
 import { eq, lt, gte, ne, desc, asc, and } from 'drizzle-orm';
 import { towel } from '$lib/drizzle/schema';
-import { redirect, type Actions } from '@sveltejs/kit';
+import { fail, redirect, type Actions } from '@sveltejs/kit';
 import { calculateDateAgo } from '$lib/utils';
 import dayjs from 'dayjs';
 
@@ -48,6 +48,9 @@ export const load: PageServerLoad = async ({ locals }) => {
 
 export const actions = {
 	refresh: async ({ locals }) => {
+		if (!locals.user) {
+			return fail(403);
+		}
 		const response = await db.insert(towel).values({ userId: locals.user.id });
 		console.log(response);
 	}
