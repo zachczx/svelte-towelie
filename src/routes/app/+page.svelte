@@ -1,13 +1,9 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
-	//@ts-ignore
-	import Red from '$lib/images/red.webp?enhanced&w=600';
-	//@ts-ignore
-	import Orange from '$lib/images/orange.webp?enhanced&w=600';
-	//@ts-ignore
-	import Yellow from '$lib/images/yellow.webp?enhanced&w=600';
-	//@ts-ignore
-	import Green from '$lib/images/green.webp?enhanced&w=600';
+	import Red from '$lib/images/red.webp?w=600&enhanced';
+	import Orange from '$lib/images/orange.webp?w=600&enhanced';
+	import Yellow from '$lib/images/yellow.webp?w=600&enhanced';
+	import Green from '$lib/images/green.webp?w=600&enhanced';
 
 	let { data } = $props();
 
