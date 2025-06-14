@@ -21,7 +21,8 @@ export const load: PageServerLoad = async ({ locals }) => {
 	const towels = towelsDb.map(
 		(item): TowelProps => ({
 			...item,
-			createdAtFormatted: calculateDateAgo(new Date(item.createdAt))
+			createdAtFormatted: dayjs(item.createdAt).format('DD MMM'),
+			createdAtSemantic: calculateDateAgo(new Date(item.createdAt))
 		})
 	);
 

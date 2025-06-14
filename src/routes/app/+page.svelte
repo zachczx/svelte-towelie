@@ -44,7 +44,7 @@
 	}
 </script>
 
-<div class="grid content-center justify-items-center gap-8 lg:grid-cols-2">
+<div class="grid content-center justify-items-center gap-8 p-2 lg:grid-cols-2">
 	<div class="grid content-center justify-items-center">
 		{#if status === 'good'}
 			<enhanced:img src={Green} alt="good" class="rounded-3xl" />
@@ -63,21 +63,40 @@
 			<button class="btn btn-xl btn-primary w-full">Washed!</button>
 		</form>
 
-		<div class="text-md flex w-full items-center justify-start gap-4">
-			Status:
-
-			<div class="flex items-center gap-2">
-				{#if status === 'good'}
-					<div class="h-4 w-4 rounded-full bg-lime-400"></div>
-				{:else if status === 'hmmm'}
-					<div class="h-4 w-4 rounded-full bg-yellow-500"></div>
-				{:else if status === 'uhhh'}
-					<div class="h-4 w-4 rounded-full bg-orange-400"></div>
-				{:else}
-					<div class="h-4 w-4 rounded-full bg-red-700"></div>
-				{/if}
-
-				<button class="cursor-pointer text-sm" onclick={() => modal.showModal()}>(see more)</button>
+		<div class="w-full">
+			<div
+				class="text-md border-base-content/5 bg-base-200/50 grid grid-cols-2 content-center gap-4 rounded-lg border shadow"
+			>
+				<div class="border-r-base-content/15 grid justify-items-center border-r p-4">
+					<div>Status</div>
+					<button
+						class="flex min-h-20 cursor-pointer items-center gap-4 py-8 text-4xl font-semibold"
+						onclick={() => modal.showModal()}
+						>{#if status === 'good'}
+							<div class="h-6 w-6 rounded-full bg-lime-400"></div>
+							Good
+						{:else if status === 'hmmm'}
+							<div class="h-6 w-6 rounded-full bg-yellow-500"></div>
+							Hmmm
+						{:else if status === 'uhhh'}
+							<div class="h-6 w-6 rounded-full bg-orange-400"></div>
+							Uhhh
+						{:else}
+							<div class="h-6 w-6 rounded-full bg-red-700"></div>
+							Yikes
+						{/if}
+					</button>
+				</div>
+				<div class="grid justify-items-center p-4">
+					<div>Last Washed</div>
+					<div class="text-center text-4xl font-semibold">
+						{#if data.towels.length > 0}
+							{data.towels[0].createdAtSemantic}
+						{:else}
+							Nil
+						{/if}
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -121,7 +140,7 @@
 			<h2 class="mb-2 text-lg font-semibold">Last 5 Washes</h2>
 			{#if data.towels.length > 0}
 				{#each data.towels as towel}
-					<li class="ms-1">{towel.createdAtFormatted}</li>
+					<li class="ms-1">{towel.createdAtSemantic} ({towel.createdAtFormatted})</li>
 				{/each}
 			{:else}
 				No washes!

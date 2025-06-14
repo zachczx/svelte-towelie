@@ -8,4 +8,5 @@ interface TowelDb {
 
 interface TowelProps extends TowelDb {
 	createdAtFormatted: string;
+	createdAtSemantic: string;
 }
