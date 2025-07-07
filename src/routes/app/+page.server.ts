@@ -51,7 +51,10 @@ export const actions = {
 		if (!locals.user) {
 			return fail(403);
 		}
-		const response = await db.insert(towel).values({ userId: locals.user.id });
-		console.log(response);
+		try {
+			await db.insert(towel).values({ userId: locals.user.id });
+		} catch (err) {
+			console.log(err);
+		}
 	}
 } satisfies Actions;
