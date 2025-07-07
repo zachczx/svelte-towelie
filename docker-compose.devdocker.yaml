@@ -1,0 +1,52 @@
+name: towelie
+
+services:
+
+  postgres:
+    image: postgres:17
+    restart: always
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
+    env_file:
+      - .env.devdocker
+    ports:
+      - '5432:5432'
+    volumes: 
+      - ./roamichidb:/var/lib/postgresql/data
+    networks:
+      - db
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+      - DB_HOST=${DB_HOST}
+      - DB_PORT=${DB_PORT}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_NAME=${DB_NAME}
+      - LISTEN_ADDR=${LISTEN_ADDR}
+      - BETTER_AUTH_URL=${BETTER_AUTH_URL}
+      - BETTER_AUTH_SECRET=${BETTER_AUTH_SECRET}
+    ports:
+      - '${LISTEN_ADDR}:3000' 
+    env_file:
+      - .env.devdocker
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy  # Wait for database to be ready
+    networks:
+      - db
+
+networks:
+  db:
+    driver: bridge
+

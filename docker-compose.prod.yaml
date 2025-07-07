@@ -1,0 +1,28 @@
+name: roamichi
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+      - DB_HOST=${DB_HOST}
+      - DB_PORT=${DB_PORT}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_NAME=${DB_NAME}
+      - LISTEN_ADDR=${LISTEN_ADDR}
+      - BETTER_AUTH_URL=${BETTER_AUTH_URL}
+      - BETTER_AUTH_SECRET=${BETTER_AUTH_SECRET}
+    ports:
+      - '${LISTEN_ADDR}:3000' 
+    restart: unless-stopped
+    environment:
+      - DB_HOST=${DB_HOST}
+      - DB_PORT=${DB_PORT}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_NAME=${DB_NAME}
+      - LISTEN_ADDR=${LISTEN_ADDR}
+      - BETTER_AUTH_URL=${BETTER_AUTH_URL}
+      - BETTER_AUTH_SECRET=${BETTER_AUTH_SECRET}
