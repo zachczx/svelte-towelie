@@ -42,6 +42,8 @@
 
 		return 'base-content';
 	}
+
+	$inspect(data.towels.length);
 </script>
 
 <div class="grid content-center justify-items-center gap-8 p-2 lg:grid-cols-2">
