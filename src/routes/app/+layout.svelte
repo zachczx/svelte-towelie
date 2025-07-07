@@ -4,8 +4,9 @@
 
 <div class="grid w-full grid-rows-[auto_1fr]">
 	<div class="p-2 text-end">
-		{data.user.email}&nbsp;&nbsp;|&nbsp;&nbsp;<a href="/logout" class="hover:text-primary underline"
-			>Logout</a
+		{data.user?.email}&nbsp;&nbsp;|&nbsp;&nbsp;<a
+			href="/logout"
+			class="hover:text-primary underline">Logout</a
 		>
 	</div>
 	<div class="screen-less-topbar grid content-center justify-items-center">
