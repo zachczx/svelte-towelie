@@ -102,7 +102,7 @@
 				<div class="grid justify-items-center p-4">
 					<div>Last Washed</div>
 					<div class="text-center text-4xl font-semibold">
-						{#if data.towels.length > 0}
+						{#if data.towels && data.towels.length > 0}
 							{data.towels[0].createdAtSemantic}
 						{:else}
 							Nil
