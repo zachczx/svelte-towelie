@@ -15,12 +15,12 @@
 	});
 	let modal = $state() as HTMLDialogElement;
 
-	type description = 'good' | 'hmmm' | 'uhhh' | 'yikes' | '';
+	type description = 'clean' | 'hmmm' | 'uhhh' | 'yikes' | '';
 
 	function getValue(val: number): description {
 		const day = 24;
 
-		if (val > 0 && val <= 2 * day) return 'good';
+		if (val > 0 && val <= 2 * day) return 'clean';
 
 		if (val > 2 * day && val <= 4 * day) return 'hmmm';
 
@@ -32,7 +32,7 @@
 	}
 
 	function getColor(strDes: string): string {
-		if (strDes === 'good') return 'text-lime-400';
+		if (strDes === 'clean') return 'text-lime-400';
 
 		if (strDes === 'hmmm') return 'text-yellow-500';
 
@@ -48,8 +48,8 @@
 
 <div class="grid content-center justify-items-center gap-8 p-2 lg:grid-cols-2">
 	<div class="grid content-center justify-items-center">
-		{#if status === 'good'}
-			<enhanced:img src={Green} alt="good" class="rounded-3xl" />
+		{#if status === 'clean'}
+			<enhanced:img src={Green} alt="clean" class="rounded-3xl" />
 		{:else if status === 'hmmm'}
 			<enhanced:img src={Yellow} alt="hmmm" class="rounded-3xl" />
 		{:else if status === 'uhhh'}
@@ -86,9 +86,9 @@
 					<button
 						class="flex min-h-20 cursor-pointer items-center gap-4 py-8 text-4xl font-semibold"
 						onclick={() => modal.showModal()}
-						>{#if status === 'good'}
+						>{#if status === 'clean'}
 							<div class="h-6 w-6 rounded-full bg-lime-400"></div>
-							Good
+							Clean
 						{:else if status === 'hmmm'}
 							<div class="h-6 w-6 rounded-full bg-yellow-500"></div>
 							Hmmm
@@ -121,11 +121,11 @@
 		<h3 class="text-4xl font-bold">More Details</h3>
 		<div class="grid min-h-16 w-full grid-cols-4">
 			<div
-				class="flex items-center justify-center rounded-l-lg bg-lime-400 {status === 'good'
+				class="flex items-center justify-center rounded-l-lg bg-lime-400 {status === 'clean'
 					? 'border-base-content border-4 font-bold'
 					: undefined}"
 			>
-				Good
+				Clean
 			</div>
 			<div
 				class="flex items-center justify-center bg-yellow-500 {status === 'hmmm'
