@@ -4,6 +4,7 @@ COPY package.json pnpm-lock.yaml ./
 RUN npm install -g corepack@latest &&\ 
     corepack enable &&\ 
     corepack prepare pnpm@latest --activate
+RUN apt-get update && apt-get install -y ca-certificates wget
 
 # Receive values from docker-compose's "build.args"
 ARG DB_HOST

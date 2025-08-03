@@ -3,8 +3,10 @@ import { db } from '$lib/drizzle/db';
 import { eq, desc } from 'drizzle-orm';
 import { towel } from '$lib/drizzle/schema';
 import { fail, redirect, type Actions } from '@sveltejs/kit';
-import { calculateDateAgo } from '$lib/utils';
 import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
+
+dayjs.extend(relativeTime);
 
 export const load: PageServerLoad = async ({ locals }) => {
 	if (!locals.user || !locals.user) {
@@ -22,7 +24,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 		(item): TowelProps => ({
 			...item,
 			createdAtFormatted: dayjs(item.createdAt).format('DD MMM'),
-			createdAtSemantic: calculateDateAgo(new Date(item.createdAt))
+			createdAtSemantic: dayjs(item.createdAt).fromNow()
 		})
 	);
 
