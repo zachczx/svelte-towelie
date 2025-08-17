@@ -1,5 +1,8 @@
-<script>
-	let { pb, children, title } = $props();
+<script lang="ts">
+	import type Client from 'pocketbase';
+	import type { Snippet } from 'svelte';
+
+	let { pb, children, title }: { pb: Client; children: Snippet; title: string } = $props();
 </script>
 
 <svelte:head>
