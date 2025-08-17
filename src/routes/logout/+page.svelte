@@ -1,16 +1,11 @@
-<script>
+<script lang="ts">
 	import { goto } from '$app/navigation';
-	import { authClient } from '$lib/auth-client';
-	import { redirect } from '@sveltejs/kit';
+	import { pb } from '$lib/pb';
 	import { onMount } from 'svelte';
 
 	onMount(async () => {
-		await authClient.signOut({
-			fetchOptions: {
-				onSuccess: () => {
-					goto('/login');
-				}
-			}
-		});
+		await pb.authStore.clear();
+
+		goto('/login');
 	});
 </script>

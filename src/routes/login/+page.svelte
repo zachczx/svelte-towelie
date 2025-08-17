@@ -1,118 +1,71 @@
-<script lang="ts">
-	import { enhance } from '$app/forms';
-	import { authClient } from '$lib/auth-client';
+<script>
+	import { goto } from '$app/navigation';
+	import PageWrapper from '$lib/PageWrapper.svelte';
+	import { pb } from '$lib/pb';
+	import { addToast } from '$lib/ui/ArkToaster.svelte';
 
-	let status = $state('');
+	if (pb.authStore.isValid) {
+		goto('/app');
+	}
+
 	let email = $state('');
 	let password = $state('');
-	let errorResponse = $state(false);
 
 	async function submitHandler() {
-		const { data, error } = await authClient.signIn.email({
-			email: email,
-			password: password,
-			callbackURL: '/'
-		});
+		spinner = true;
+		const cleanEmail = email.toLowerCase().trim();
+		const cleanPassword = password.trim();
 
-		if (error) {
-			errorResponse = true;
-			status = 'error';
+		try {
+			const authData = await pb.collection('users').authWithPassword(cleanEmail, cleanPassword);
+			console.log(authData);
+			if (authData.token) {
+				addToast('success', 'Logged in successfully!');
+				spinner = false;
+				goto('/app');
+			}
+		} catch (err) {
+			console.log(err);
 		}
 	}
+
+	let spinner = $state(false);
 </script>
 
-<div class="font-logo text-9xl"><a href="/">Towelie</a></div>
-<section class="grid w-full content-center justify-items-center gap-8 p-4">
-	<h1 class="text-6xl font-bold">Login</h1>
-	<form
-		class="grid w-full max-w-96 gap-4"
-		onsubmit={() => {
-			status = 'submitted';
-			submitHandler();
-		}}
-	>
-		<div>
-			<label class="input validator input-primary w-full">
-				<svg class="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-					<g
-						stroke-linejoin="round"
-						stroke-linecap="round"
-						stroke-width="2.5"
-						fill="none"
-						stroke="currentColor"
-					>
-						<path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
-						<circle cx="12" cy="7" r="4"></circle>
-					</g>
-				</svg>
-				<input
-					bind:value={email}
-					type="email"
-					required
-					placeholder="Email"
-					title="Only letters, numbers or dash"
-				/>
-			</label>
-			<p class="validator-hint hidden">Must be a valid email</p>
+<PageWrapper title="Login" {pb}>
+	<form class="grid w-full max-w-sm content-center">
+		<div class="mb-8">
+			<h1 class="font-logo text-primary text-9xl font-medium">Nosey</h1>
+			<h2 class="flex items-center gap-2 text-2xl">
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					width="1em"
+					height="1em"
+					class="material-symbols:subdirectory-arrow-right-rounded"
+					viewBox="0 0 24 24"
+					><!-- Icon from Material Symbols by Google - https://github.com/google/material-design-icons/blob/master/LICENSE --><path
+						fill="currentColor"
+						d="M13.3 20.275q-.3-.3-.3-.7t.3-.7L16.175 16H7q-.825 0-1.412-.587T5 14V5q0-.425.288-.712T6 4t.713.288T7 5v9h9.175l-2.9-2.9q-.3-.3-.288-.7t.288-.7q.3-.3.7-.312t.7.287L19.3 14.3q.15.15.212.325t.063.375t-.063.375t-.212.325l-4.575 4.575q-.3.3-.712.3t-.713-.3"
+					/></svg
+				>Login
+			</h2>
 		</div>
-		<div>
-			<label class="input validator input-primary w-full">
-				<svg class="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-					<g
-						stroke-linejoin="round"
-						stroke-linecap="round"
-						stroke-width="2.5"
-						fill="none"
-						stroke="currentColor"
-					>
-						<path
-							d="M2.586 17.414A2 2 0 0 0 2 18.828V21a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h1a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h.172a2 2 0 0 0 1.414-.586l.814-.814a6.5 6.5 0 1 0-4-4z"
-						></path>
-						<circle cx="16.5" cy="7.5" r=".5" fill="currentColor"></circle>
-					</g>
-				</svg>
-				<input
-					type="password"
-					bind:value={password}
-					required
-					placeholder="Password"
-					minlength="8"
-					title="Must be more than 8 characters, including number, lowercase letter, uppercase letter"
-				/>
-			</label>
-			<p class="validator-hint hidden">
-				Must be more than 8 characters, including
-				<br />At least one number <br />At least one lowercase letter <br />At least one uppercase
-				letter
-			</p>
-		</div>
-		{#if errorResponse}
-			<div class="text-error font-semibold">Login error with the email or password entered.</div>
-		{/if}
-		<div class="grid">
-			<button class="btn {status === 'success' ? 'btn-success' : 'btn-primary'}">
-				{#if status === 'success'}
-					<div class="flex items-center gap-2">
-						<svg
-							xmlns="http://www.w3.org/2000/svg"
-							width="1.3em"
-							height="1.3em"
-							class="carbon:checkmark"
-							viewBox="0 0 32 32"
-							><path
-								fill="currentColor"
-								d="m13 24l-9-9l1.414-1.414L13 21.171L26.586 7.586L28 9z"
-							/></svg
-						>
-						<span>Success!</span>
-					</div>
-				{:else if status === 'submitted'}
-					<span class="loading loading-spinner loading-sm"></span>
-				{:else}
-					Login
-				{/if}</button
-			>
-			<a href="/register" class="text-primary text-center text-sm underline">Or register here</a>
-		</div>
+
+		<fieldset class="fieldset">
+			<legend class="fieldset-legend">Username</legend>
+			<input type="text" name="email" bind:value={email} class="input w-full" />
+		</fieldset>
+
+		<fieldset class="fieldset">
+			<legend class="fieldset-legend">Password</legend>
+			<input type="password" name="password" bind:value={password} class="input w-full" />
+		</fieldset>
+		<button class="btn btn-primary mt-4" onclick={() => submitHandler()}>
+			{#if !spinner}
+				Login
+			{:else}
+				<span class="loading loading-md loading-spinner"></span>
+			{/if}
+		</button>
 	</form>
-</section>
+</PageWrapper>

@@ -1,8 +1,10 @@
 <script lang="ts">
-	let { children, data } = $props();
+	let { children } = $props();
 </script>
 
-<div class="grid w-full grid-rows-[auto_1fr]">
+{@render children()}
+
+<!-- <div class="grid w-full grid-rows-[auto_1fr]">
 	<div class="p-2 text-end">
 		{data.user?.email}&nbsp;&nbsp;|&nbsp;&nbsp;<a
 			href="/logout"
@@ -18,4 +20,4 @@
 	.screen-less-topbar {
 		min-height: calc(100vh - 2.5rem);
 	}
-</style>
+</style> -->
