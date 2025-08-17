@@ -35,7 +35,7 @@
 <PageWrapper title="Login" {pb}>
 	<form class="grid w-full max-w-sm content-center">
 		<div class="mb-8">
-			<h1 class="font-logo text-primary text-9xl font-medium">Nosey</h1>
+			<h1 class="font-logo text-primary text-9xl font-medium">Towelie</h1>
 			<h2 class="flex items-center gap-2 text-2xl">
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
