@@ -96,6 +96,24 @@
 			sort: '-time'
 		});
 	}
+
+	function stripNegative(input: number): string {
+		if (input < 0) {
+			input = input * -1;
+		}
+
+		let clean = '';
+
+		if (input === 0) {
+			clean = input.toFixed(0).toString() + ' day';
+		} else if (input <= 1) {
+			clean = input.toFixed(1).toString() + ' day';
+		} else {
+			clean = input.toFixed(1).toString() + ' days';
+		}
+
+		return clean;
+	}
 </script>
 
 <PageWrapper title="Towel Logs" {pb}>
@@ -128,7 +146,7 @@
 							fill="currentColor"
 							d="M12 20q-3.35 0-5.675-2.325T4 12t2.325-5.675T12 4q1.725 0 3.3.712T18 6.75V5q0-.425.288-.712T19 4t.713.288T20 5v5q0 .425-.288.713T19 11h-5q-.425 0-.712-.288T13 10t.288-.712T14 9h3.2q-.8-1.4-2.187-2.2T12 6Q9.5 6 7.75 7.75T6 12t1.75 4.25T12 18q1.7 0 3.113-.862t2.187-2.313q.2-.35.563-.487t.737-.013q.4.125.575.525t-.025.75q-1.025 2-2.925 3.2T12 20"
 						/></svg
-					>Reset Wash Timer</button
+					>Reset Wash Counter</button
 				>
 			</form>
 
@@ -212,12 +230,22 @@
 		</div>
 
 		<div class="w-full text-sm">
-			<h2 class="mb-2 text-lg font-semibold">Last 5 Washes</h2>
+			<h2 class="mb-2 text-lg font-semibold">Past 7 Washes</h2>
 			{#if results && results.length > 0}
-				{#each results as towel}
-					{@const formatted = dayjs(towel.time).format('DD MMM, h:mma')}
-					{@const semantic = dayjs(towel.time).fromNow()}
-					<li class="ms-1">{semantic} ({formatted})</li>
+				{#each results as towel, i}
+					{#if i <= 6}
+						{@const formatted = dayjs(results[i].time).format('D MMM, h:mma')}
+						{@const semantic = stripNegative(
+							i === results.length - 1
+								? 0
+								: dayjs(results[i].time).diff(results[i + 1].time, 'day', true)
+						)}
+						<li class="border-b-base-300 ms-1 border-b py-2">
+							{formatted}&nbsp;&nbsp;<span class="border-neutral/30 rounded-full border px-2"
+								>+{semantic}</span
+							>
+						</li>
+					{/if}
 				{/each}
 			{:else}
 				No washes!
